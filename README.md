@@ -11,9 +11,23 @@ Create a `.env` file like below, modifying any variables needed.
    MP_MEM_INIT=1024m
    TIMEZONE=UTC
 ```
+Generate the ssl key/cert for nginx ssl proxy
+```
+$ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+   -keyout ./nginx/nginx.key \
+   -out ./nginx/nginx.crt
+```
+Copy the cert to the `midpoint_server/ssl_certs/` directory
+```
+$ cp ./nginx/nginx.crt ./midpoint_server/ssl_certs/
+```
 
 start the containers
 
 `$ docker-compose up -d`
 
-access the midpoint server at `https://localhost`
+Access midpoint: 
+
+* URL: https://127.0.0.1/midpoint
+* username: `Administrator`
+* password: `5ecr3t`

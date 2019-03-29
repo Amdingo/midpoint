@@ -1,6 +1,17 @@
 version: "3.3"
 
 services:
+  nginx:
+    build:
+      context: ./nginx
+    command: nginx
+    depends_on:
+      - midpoint_data
+      - midpoint_server
+    ports:
+      - 443:443
+    volumes:
+      - midpoint_nginx_config:/etc/midpoint-nginx/:ro
   midpoint_data:
     image: postgres:9.5
     environment:
@@ -9,8 +20,6 @@ services:
      - POSTGRES_INITDB_ARGS=--lc-collate=en_US.utf8 --lc-ctype=en_US.utf8
     ports:
      - 5432:5432
-    networks:
-     - net
     secrets:
      - mp_database_password.txt
     volumes:
@@ -20,8 +29,6 @@ services:
     build: ./midpoint_server/
     depends_on:
      - midpoint_data
-    ports:
-      - 8080:8080
     environment:
      - REPO_DATABASE_TYPE=postgresql
      - REPO_HOST=midpoint_data
@@ -37,17 +44,11 @@ services:
      - MP_MEM_INIT
      - MP_JAVA_OPTS
      - TIMEZONE
-    networks:
-     - net
     secrets:
      - mp_database_password.txt
      - mp_keystore_password.txt
     volumes:
      - midpoint_home:/opt/midpoint/var
-
-networks:
-  net:    
-    driver: bridge
 
 secrets:
   mp_database_password.txt:
@@ -58,3 +59,4 @@ secrets:
 volumes:
   midpoint_data:
   midpoint_home:
+  midpoint_nginx_config:
