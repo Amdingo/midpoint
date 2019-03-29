@@ -1,3 +1,5 @@
+Forked from https://github.com/Evolveum/midpoint-docker this is https://github.com/Evolveum/midpoint-docker/tree/master/demo/postgresql with an https nginx container.
+
 Make sure to change the password located in `./configs-and-secrets/midpoint/database_password.txt`
 
 Create a `.env` file like below, modifying any variables needed.
